@@ -194,7 +194,39 @@ async function loadNews() {
     const card =
       document.createElement("div");
 
-    card.className = "news-card";
+    card.className = card.innerHTML = `
+
+  <a href="news.html?id=${news.id}"
+     style="text-decoration:none;color:inherit;">
+
+    <img
+      src="${news.image_url}"
+      alt="${news.title}"
+    >
+
+    <div class="news-content">
+
+      <span class="category">
+        ${news.category}
+      </span>
+
+      <h2>
+        ${news.title}
+      </h2>
+
+      <p>
+        ${news.content}
+      </p>
+
+      <div class="date">
+        ${new Date(news.created_at).toLocaleString()}
+      </div>
+
+    </div>
+
+  </a>
+
+`;;
 
 
     card.innerHTML = `
