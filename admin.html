@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin | The Flash News 250</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f1f5f9;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 18px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 22px;
+    }
+
+    #logoutBtn {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin-bottom: 25px;
+      color: #111827;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
+      color: #374151;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+    }
+
+    #publishBtn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 7px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #publishBtn:hover {
+      background: #1d4ed8;
+    }
+
+    #message {
+      margin-top: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>The Flash News 250</h1>
+    <button id="logoutBtn">Logout</button>
+  </header>
+
+  <div class="container">
+
+    <div class="card">
+
+      <h2>Admin Dashboard</h2>
+
+      <label for="title">Umutwe w'Amakuru</label>
+
+      <input
+        type="text"
+        id="title"
+        placeholder="Andika umutwe w'inkuru"
+      >
+
+      <label for="content">Inkuru</label>
+
+      <textarea
+        id="content"
+        placeholder="Andika amakuru hano..."
+      ></textarea>
+
+      <button id="publishBtn">
+        Publish News
+      </button>
+
+      <p id="message"></p>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://ozlxkleiagayfrnqvvld.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_iEqsbTByRdSI9dTi5IDujw_sZZfJtPb";
+
+    const supabaseClient =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    // CHECK LOGIN
+
+    async function checkLogin() {
+
+      const {
+        data: { user }
+      } = await supabaseClient.auth.getUser();
+
+      if (!user) {
+
+        window.location.href =
+          "login.html";
+
+      }
+
+    }
+
+    checkLogin();
+
+
+    // LOGOUT
+
+    document
+      .getElementById("logoutBtn")
+      .addEventListener("click", async function() {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+          "login.html";
+
+      });
+
+
+    // PUBLISH NEWS
+
+    document
+      .getElementById("publishBtn")
+      .addEventListener("click", async function() {
+
+        const title =
+          document.getElementById("title")
+            .value.trim();
+
+        const content =
+          document.getElementById("content")
+            .value.trim();
+
+        const message =
+          document.getElementById("message");
+
+
+        if (!title || !content) {
+
+          message.style.color = "red";
+
+          message.textContent =
+            "Banza wuzuze umutwe n'inkuru.";
+
+          return;
+
+        }
+
+
+        message.style.color = "#2563eb";
+
+        message.textContent =
+          "Amakuru arimo gutangazwa...";
+
+
+        const { error } =
+          await supabaseClient
+            .from("news")
+            .insert([
+              {
+                title: title,
+                content: content
+              }
+            ]);
+
+
+        if (error) {
+
+          message.style.color = "red";
+
+          message.textContent =
+            "Error: " + error.message;
+
+          return;
+
+        }
+
+
+        message.style.color = "green";
+
+        message.textContent =
+          "Amakuru yatangajwe neza!";
+
+
+        document.getElementById("title")
+          .value = "";
+
+        document.getElementById("content")
+          .value = "";
+
+      });
+
+  </script>
+
+</body>
+</html>
