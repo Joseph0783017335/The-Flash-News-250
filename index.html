@@ -769,14 +769,9 @@
 card.style.cursor = "pointer";
 
 card.onclick = function () {
-
-    localStorage.setItem(
-        "selectedNews",
-        JSON.stringify(item)
-    );
-
-    window.location.href = "news.html";
-
+    window.location.href =
+        "news.html?id=" + encodeURIComponent(item.id);
+};
 
 };
                 if (index < 4) {
