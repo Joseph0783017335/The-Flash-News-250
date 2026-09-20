@@ -766,7 +766,11 @@
 
                 grid.appendChild(card);
 
+card.style.cursor = "pointer";
 
+card.onclick = function () {
+    alert("Inkuru: " + item.title);
+};
                 if (index < 4) {
 
                     const sideItem =
