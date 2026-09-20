@@ -769,7 +769,15 @@
 card.style.cursor = "pointer";
 
 card.onclick = function () {
-    alert("Inkuru: " + item.title);
+
+    localStorage.setItem(
+        "selectedNews",
+        JSON.stringify(item)
+    );
+
+    window.location.href = "news.html";
+
+
 };
                 if (index < 4) {
 
