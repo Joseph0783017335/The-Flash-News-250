@@ -845,20 +845,7 @@
 });
 
 
-// Fungura inkuru yose iyo umuntu akandagiyeho
-document.querySelectorAll(".news-card").forEach(card => {
-    card.style.cursor = "pointer";
 
-    card.addEventListener("click", () => {
-        const title = card.querySelector("h3")?.innerText || "";
-        const content = card.querySelector("p")?.innerText || "";
-        const image = card.querySelector("img")?.src || "";
-
-        const params = new URLSearchParams({
-            title: title,
-            content: content,
-            image: image
-        });
 
       
 document.getElementById("breakingText").innerText =
